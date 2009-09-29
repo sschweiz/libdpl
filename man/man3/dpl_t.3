@@ -1,0 +1,59 @@
+.TH "dpl_t" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_t \- DPL master structure.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <dpl_types.h>\fP
+.PP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "MPI_Comm \fBcomm\fP"
+.br
+.RI "\fIMPI communicator. \fP"
+.ti -1c
+.RI "MPI_Status * \fBstat\fP"
+.br
+.RI "\fIMPI status array for each process. \fP"
+.ti -1c
+.RI "MPI_Request * \fBreq\fP"
+.br
+.RI "\fIMPI request array for each process. \fP"
+.ti -1c
+.RI "int \fBworld_size\fP"
+.br
+.RI "\fIsize of the communicator \fP"
+.ti -1c
+.RI "unsigned int \fBflags\fP"
+.br
+.RI "\fIDPL use flags. \fP"
+.ti -1c
+.RI "RANK * \fBmyrank\fP"
+.br
+.RI "\fIrank variable for current process \fP"
+.ti -1c
+.RI "\fBdpl_cache_t\fP * \fBcache\fP"
+.br
+.RI "\fIpointer to cache structure (NULL if caching is not used) \fP"
+.ti -1c
+.RI "\fBdpl_tree_t\fP * \fBtree\fP"
+.br
+.RI "\fIpointer to dpl identity tree array \fP"
+.ti -1c
+.RI "\fBdpl_heartbeat_t\fP * \fBheartbeat\fP"
+.br
+.RI "\fIpointer to dpl heartbeat thread controller \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+DPL master structure. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

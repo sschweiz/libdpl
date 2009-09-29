@@ -1,0 +1,173 @@
+.TH "dpl_func.h" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_func.h \- Function definitions for general DPL routines. 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <mpi.h>\fP
+.br
+\fC#include <stdio.h>\fP
+.br
+\fC#include 'dpl_types.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBdpltree_typesetup\fP ()"
+.br
+.RI "\fISetup the dpltree_type structure to allow sending of the \fBdpl_tree_t\fP class across the network. \fP"
+.ti -1c
+.RI "int \fBdpl_init\fP (\fBdpl_t\fP *d, MPI_Comm comm, FILE *treefile, int argc, char *argv[], unsigned int flags)"
+.br
+.RI "\fIInitializer function for the \fBdpl_t\fP structure. \fP"
+.ti -1c
+.RI "void \fBdpl_init_tree\fP (\fBdpl_t\fP *d, FILE *treefile)"
+.br
+.RI "\fIInitializes the identity tree from a file. \fP"
+.ti -1c
+.RI "int \fBdpl_destroy\fP (\fBdpl_t\fP *d)"
+.br
+.RI "\fIDestroys the \fBdpl_t\fP structure and frees and allocated memory. \fP"
+.ti -1c
+.RI "void \fBdpl_prepare_data\fP (\fBdpl_t\fP *d, char *input, size_t in_size, \fBdpl_prepared\fP *output, size_t *out_size)"
+.br
+.RI "\fIPrepares data to be distributed across the network. \fP"
+.ti -1c
+.RI "void \fBdpl_group_info\fP (\fBdpl_t\fP *d, size_t *group_size, size_t *roots, size_t *pseudoroots, size_t *nodes)"
+.br
+.RI "\fIObtains general info about the group of the current process. \fP"
+.ti -1c
+.RI "void \fBdpl_ping\fP (\fBdpl_t\fP *d, unsigned int packet_size)"
+.br
+.RI "\fISequentially pings all processes. \fP"
+.ti -1c
+.RI "void \fBdpl_generate_treefile\fP (\fBdpl_t\fP *d, FILE *out)"
+.br
+.RI "\fIGenerates a treefile from the initialized tree, or a master/slave tree from the processes. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Function definitions for general DPL routines. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "int dpl_destroy (\fBdpl_t\fP * d)"
+.PP
+Destroys the \fBdpl_t\fP structure and frees and allocated memory. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+return code of MPI_Finalize() 
+.RE
+.PP
+
+.SS "void dpl_generate_treefile (\fBdpl_t\fP * d, FILE * out)"
+.PP
+Generates a treefile from the initialized tree, or a master/slave tree from the processes. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure 
+.br
+\fIout\fP pointer to output file 
+.RE
+.PP
+
+.SS "void dpl_group_info (\fBdpl_t\fP * d, size_t * group_size, size_t * roots, size_t * pseudoroots, size_t * nodes)"
+.PP
+Obtains general info about the group of the current process. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure 
+.br
+\fIgroup_size\fP pointer to variable to contain the size of the group 
+.br
+\fIroots\fP pointer to variable to contain the number of roots in the group 
+.br
+\fIpseudoroots\fP pointer to variable to contain the number of pseudoroots in the group 
+.br
+\fInodes\fP pointer to variable to contain the number of nodes in the group 
+.RE
+.PP
+
+.SS "int dpl_init (\fBdpl_t\fP * d, MPI_Comm comm, FILE * treefile, int argc, char * argv[], unsigned int flags)"
+.PP
+Initializer function for the \fBdpl_t\fP structure. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to the \fBdpl_t\fP structure 
+.br
+\fIcomm\fP the MPI communicator to use with the DPL structure 
+.br
+\fItreefile\fP File pointer to list of tree definitions 
+.br
+\fIargc\fP argc variable from main() 
+.br
+\fIargv\fP argv variable from main() 
+.br
+\fIflags\fP DPL use flags 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+Rank of current process 
+.RE
+.PP
+
+.SS "void dpl_init_tree (\fBdpl_t\fP * d, FILE * treefile)"
+.PP
+Initializes the identity tree from a file. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure 
+.br
+\fItreefile\fP File pointer to list of tree definitions 
+.RE
+.PP
+
+.SS "void dpl_ping (\fBdpl_t\fP * d, unsigned int packet_size)"
+.PP
+Sequentially pings all processes. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure 
+.br
+\fIpacket_size\fP size of packet to ping with, in bytes 
+.RE
+.PP
+
+.SS "void dpl_prepare_data (\fBdpl_t\fP * d, char * input, size_t in_size, \fBdpl_prepared\fP * output, size_t * out_size)"
+.PP
+Prepares data to be distributed across the network. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure 
+.br
+\fIinput\fP data input array 
+.br
+\fIin_size\fP size of input array 
+.br
+\fIoutput\fP dpl_prepared data output format 
+.br
+\fIout_size\fP the 'height' of the output of the 2-dimensional array
+.RE
+.PP
+This function serves to split a single array of data into smaller pieces which can then be distributed across the network. It used dpl_prepared as output to generate a 3-dimensional array of length (grp_roots + grp_pseudoroots), width (grp_nodes + 1) and height equal to the minimum amount the data can be split in this method. If the data cannot be divided evenly it is padded with zeros. This function has considerable overhead if caching is turned off. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

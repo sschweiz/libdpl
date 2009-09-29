@@ -1,0 +1,35 @@
+.TH "dpl_tree_t" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_tree_t \- DPL tree structure.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <dpl_types.h>\fP
+.PP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBrank\fP"
+.br
+.RI "\fICurrent leaf rank. \fP"
+.ti -1c
+.RI "int \fBparentid\fP"
+.br
+.RI "\fIRank of current leaf parent. \fP"
+.ti -1c
+.RI "char \fBtype\fP"
+.br
+.RI "\fIType char of current leaf. Bits 0-1 are the leaf type, bits 2-7 are the leaf group. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+DPL tree structure. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

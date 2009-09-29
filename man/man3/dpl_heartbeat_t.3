@@ -1,0 +1,43 @@
+.TH "dpl_heartbeat_t" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_heartbeat_t \- DPL threaded heartbeat structure.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <dpl_thread.h>\fP
+.PP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBfrequency\fP"
+.br
+.RI "\fIheartbeat frequency in seconds \fP"
+.ti -1c
+.RI "pthread_t \fBbeat_thread\fP"
+.br
+.RI "\fIheartbeat thread structure \fP"
+.ti -1c
+.RI "pthread_mutex_t \fBbeat_mutex\fP"
+.br
+.RI "\fIheartbeat thread mutex structure \fP"
+.ti -1c
+.RI "pthread_cond_t \fBbeat_cond\fP"
+.br
+.RI "\fIheartbeat thread condition variable structure \fP"
+.ti -1c
+.RI "pthread_attr_t \fBbeat_attr\fP"
+.br
+.RI "\fIheartbeat thread attribute structure \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+DPL threaded heartbeat structure. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

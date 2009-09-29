@@ -1,0 +1,91 @@
+.TH "dpl_types.h" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_types.h \- Global variable and type definitions. 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <mpi.h>\fP
+.br
+\fC#include 'dpl_thread.h'\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBdpl_tree_t\fP"
+.br
+.RI "\fIDPL tree structure. \fP"
+.ti -1c
+.RI "struct \fBdpl_group_internal_t\fP"
+.br
+.RI "\fIDPL group cache structure. Intended for internal use. \fP"
+.ti -1c
+.RI "struct \fBdpl_cache_t\fP"
+.br
+.RI "\fIDPL cache structure. \fP"
+.ti -1c
+.RI "struct \fBdpl_t\fP"
+.br
+.RI "\fIDPL master structure. \fP"
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBDPL_RANK_MASTER\fP   0"
+.br
+.RI "\fIMPI Rank of the master process (usually 0). \fP"
+.ti -1c
+.RI "#define \fBDPL_STANDARD\fP   0x00000"
+.br
+.RI "\fIDPL standard use flag defined for completeness. \fP"
+.ti -1c
+.RI "#define \fBDPL_USE_CACHE\fP   0x00001"
+.br
+.RI "\fIDPL cache flag. Turns on cache speedup optimizations. \fP"
+.ti -1c
+.RI "#define \fBDPL_HEARTBEAT\fP   0x00002"
+.br
+.RI "\fIDPL heartbeat flag. Turns on fork process which moniters nodes via a ping. \fP"
+.ti -1c
+.RI "#define \fBDPL_ONLYSLAVES\fP   0x00004"
+.br
+.RI "\fIDPL slave flag. Specifies a configuration where, by default, DPL_RANK_MASTER is the only root and the rest of the processes are slave nodes. \fP"
+.ti -1c
+.RI "#define \fBDPL_USE_DEBUG\fP   0x00008"
+.br
+.RI "\fIDPL debug flag. Turns on debugging information. \fP"
+.ti -1c
+.RI "#define \fBDPL_NO_TREE\fP   0x00010"
+.br
+.RI "\fIDPL no tree flag. Does not parse a treefile (treefile can be passed to init as NULL). \fP"
+.ti -1c
+.RI "#define \fBDPL_HYPERTHREADING\fP   0"
+.br
+.in -1c
+.SS "Typedefs"
+
+.in +1c
+.ti -1c
+.RI "typedef char *** \fBdpl_prepared\fP"
+.br
+.RI "\fIproprietary type for sending distributed data \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Global variable and type definitions. 
+
+The Distributed Performance Library uses a tree structure to keep track of the duties and identities of each process. This information can be dynamically changing to perform seperate parallel operations. A cache of the tree is available, at the cost of machine memory, to speed up calculations involving tree traversal and lookup. 
+.SH "Define Documentation"
+.PP 
+.SS "#define DPL_HYPERTHREADING   0"
+.PP
+If your computer uses hyperthreading and you would like to expand the library to treat each hyperthread as a seperate core, set this to your splitting number
+.PP
+NOTE: This should only be used if you know exactly what you are doing 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

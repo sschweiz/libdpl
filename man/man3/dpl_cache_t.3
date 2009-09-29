@@ -1,0 +1,35 @@
+.TH "dpl_cache_t" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_cache_t \- DPL cache structure.  
+
+.PP
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <dpl_types.h>\fP
+.PP
+.SS "Data Fields"
+
+.in +1c
+.ti -1c
+.RI "int \fBgrp_count\fP"
+.br
+.RI "\fINumber of different groups. \fP"
+.ti -1c
+.RI "\fBdpl_group_internal_t\fP * \fBgrps\fP"
+.br
+.RI "\fIArray of cached group information. \fP"
+.ti -1c
+.RI "\fBdpl_tree_t\fP * \fBfixed\fP"
+.br
+.RI "\fIPointer to cached dpl identity tree array. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+DPL cache structure. 
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

@@ -1,0 +1,67 @@
+.TH "dpl_thread.c" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_thread.c \- Sourcecode for functions listed in \fBdpl_thread.h\fP. 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <pthread.h>\fP
+.br
+\fC#include <unistd.h>\fP
+.br
+\fC#include <signal.h>\fP
+.br
+\fC#include <stdlib.h>\fP
+.br
+\fC#include <time.h>\fP
+.br
+\fC#include <stdio.h>\fP
+.br
+\fC#include 'dpl_thread.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void * \fBdpl_beat\fP (void *args)"
+.br
+.RI "\fIHeartbeat thread function. \fP"
+.ti -1c
+.RI "int \fBdpl_init_heartbeat\fP (\fBdpl_heartbeat_t\fP *b, int freq)"
+.br
+.RI "\fIInitializes the heartbeat structure and creates the thread. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+Sourcecode for functions listed in \fBdpl_thread.h\fP. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "void* dpl_beat (void * args)"
+.PP
+Heartbeat thread function. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIargs\fP void* typecast of the heartbeat structure 
+.RE
+.PP
+
+.SS "int dpl_init_heartbeat (\fBdpl_heartbeat_t\fP * b, int freq)"
+.PP
+Initializes the heartbeat structure and creates the thread. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP pointer to heartbeat structure 
+.br
+\fIfreq\fP desired heartbeat frequency 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

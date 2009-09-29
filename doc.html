@@ -1,0 +1,275 @@
+<html>
+<head>
+	<title>libdpl Ideology and Documentation</title>
+</head>
+
+<body>
+<h1>libdpl 1.0</h1>
+
+<h2>About</h2>
+<p align="justify">
+The Distributed Performance Library (DPL) designed to make it easy to create a dynamic and generic
+interface for distributed and parallel computing. It was written for the Hubble Sphere Hydrogen Survey
+by Stephen Schweizer &lt;schweizer@cmu.edu&gt;. The code is free and open source, but used with permission.
+It is copyright 2008 Carnegie Mellon University.
+</p>
+
+<h2>Installation</h2>
+
+<h3>Unpacking and compiling</h3>
+<p align="justify">
+DPL is considered free but used with permission.  If you are an academic institution or research facility
+and would like a copy of libdpl, email schweizer@cmu.edu.  Once you have obtained a copy, simply untar it
+and cd into the directory.
+</p>
+<pre>
+ $ tar -xzf libdpl-1.0.tar.gz
+ $ cd libdpl-1.0
+</pre>
+<p align="justify">
+Next, you compile and make it in the same way that you would any other program.  You will need a recent copy
+of mpi to run the code.  We recommend openmpi, which can be obtained at
+<a href="http://www.open-mpi.org/">http://www.open-mpi.org</a> or mpich, which can be obtained at
+<a href="http://www.mcs.anl.gov/research/projects/mpich2/">http://www.mcs.anl.gov/research/projects/mpich2/</a>.
+Both of these are nearly identical for use with libdpl.  Once you have installed a version of mpi, you
+need to decide whether you want to build openmp support.  You can read about openmp at it's wiki
+<a href="http://en.wikipedia.org/wiki/Openmp">http://en.wikipedia.org/wiki/Openmp</a>.  If you decide to
+use openmp, you will need to make sure that you default compiler has support for it.  Most commercial
+C compilers will support openmp (but you shouldn't take my word for it).  Also, gcc versions 4.2.0 and
+above support openmp as well.  I would recommend reading more about DPL and openmp in the section below.
+If you decide to use it, add --with-openmp to the list of arguments when your run configure. Once you have
+all the prerequisits, go ahead and configure and make.
+</p>
+<pre>
+ $ ./configure --prefix=/usr
+ $ make
+ # make install
+</pre>
+<p align="justify">
+Congratulations!  You should now have a working copy of libdpl installed and ready to use.
+</p>
+
+<h2>Your first program with libdpl</h2>
+<h3>Hello World! with libdpl</h3>
+<p align="justify">
+Create a file hello.c with the following contents
+</p>
+<pre>
+	#include &lt;mpi.h&gt;
+	#include &lt;dpl.h&gt;
+	#include &lt;stdio.h&gt;
+
+	int main(int argc, char **argv)
+	{
+		dpl_t d;
+
+		dpl_init(&amp;d, MPI_COMM_WORLD, NULL, argc, argv, DPL_NO_TREE);
+
+		printf("Hello World!\n");
+
+		dpl_destroy(&amp;d);
+		return 0;
+	}
+</pre>
+<p align="justify">
+Save the file and compile and run it.  If you are not familiar with mpi and how it works, you should
+take the time now to read up on it.  This document will assume you have basic knowledge of how mpi works
+and how to run jobs with mpi.
+</p>
+<pre>
+ $ mpicc hello.c -ldpl
+ $ mpiexec -np 2 a.out
+ Hello World!
+ Hello World!
+</pre>
+<h3>Doing work</h3>
+
+<h2>Treefiles</h2>
+
+<h3>Description</h3>
+<p align="justify">
+The major area of flexability with libdpl comes from the use of treefiles.  While libdpl can detect
+every node on your network that you specify, it cannot predict how you want to distribute data across
+these nodes.  You may have a fairly complicated scheme you want to use.  One thing is for sure, you
+can probably make a simple tree graph which shows the layout of your network.  This is the ideology
+that libdpl uses.  Whether you have a simple master/slave architecture, where the head processor is the
+master and all other processors do the work the master gives out, or you have some complicated hierarchy,
+libdpl can accomidate either option quite effectively.  The treefile is a special file used by libdpl
+which stores a list of the layout of each processor in your network.  Each line of the file corresponds
+to a sperate process and lists the processes job and relation to the other processes.
+</p>
+
+<h3>Format</h3>
+<p align="justify">
+The treefile is a list of each process on each line of the file and follows the format
+</p>
+<pre>
+ &lt;host&gt; &lt;type&gt; &lt;group&gt;
+</pre>
+<p align="justify">
+&lt;host&gt; is the hostname of the computer where the processor exists on your network.  It could be the
+FQDN if you network is set up that way, or even the ip address of that computer.  In general, if the machine
+is in /etc/hosts, you can use just the hostname.  A rule of thumb would be to use whatever hostname you would
+to ssh into that machine, or to use the output of the hostname command run on that machine.
+&lt;type&gt; is either root, pseudoroot, or node (see below).
+&lt;group&gt; is a number from 0-8192 which specifies the group the process is in.
+</p>
+
+<h3>Tree basics</h3>
+<p align="justify">
+Each process in your network can be one of three types.  Either a root, a pseudoroot, or a node.  The
+processes can further be divided into groups which contain one or more of these types.  Each group can
+work on different pieces of data seperately, but in parallel.  Grouping is designed to separate the
+network and allow a single program writen with DPL to perform many tasks on independent pieces of data
+all in parallel with each other.  The process types tell the distribution engine how to prepare the
+data for the group by letting the engine know what role each process is supposed to have in the distribution
+of data.  This is the major part of what make libdpl work on a wide variety of clusters.  It is also
+the most non-trivial part of the library's usage.  A poorly designed network scheme will cause libdpl
+to function inefficiently.  It is up to you, the user, to understand how you want your data to be distributed
+and how to configure libdpl to utilize this configuration.  
+</p>
+<p align="justify">
+With that said, let's dive into the basics of
+setting up a treefile with a simple network of 16 processors.  Let's imagine that you have two server boxes
+(node1 and node2)
+with dual quad core processors.  The simplest setup for this network would be a master/slave configuration
+where one core is a master and the rest are slaves.  For this example, we want to perform an arbitrary task
+on a peice of data in parallel.
+</p>
+<pre>
+	void task(char *data, size_t data_size, void *args);
+</pre>
+<p align="justify">
+You want to create a treefile which reflects this network.  For now, we will not worry about adding openmp
+and focus only on a pure mpi implimentation of libdpl.  Creating a treefile for a master/slave network is easy.
+</p>
+<pre>
+ node1 root 0
+ node1 node 0
+ node1 node 0
+ node1 node 0
+ node1 node 0
+ node1 node 0
+ node1 node 0
+ node1 node 0
+ node2 node 0
+ node2 node 0
+ node2 node 0
+ node2 node 0
+ node2 node 0
+ node2 node 0
+ node2 node 0
+ node2 node 0
+</pre>
+<p align="justify">
+You want to create a treefile which reflects this network.  For now, we will not worry about adding openmp
+There are some basic prerequisists to trees in libdpl.  First, every tree must have exactly one root.  Second,
+the number of nodes must be divisible by the total number of roots (which is 1 + the number of pseudoroots).
+If this rule is not adhered to, libdpl will not work properly and may even fail to initialize at all.
+You want to create a treefile which reflects this network.  For now, we will not worry about adding openmp
+</p>
+<p align="justify">
+This distribution scheme is pretty simple, but what will libdpl do when told to use this scheme?  This is where
+the distribution ideology comes into play.  DPL will assume a distibution scheme as follows:
+</p>
+<pre>
+ root
+  |
+  +---node-node-...-node
+</pre>
+<p align="justify">
+That is, the root whill receive some data, split it up into 16 peices, distribute a piece to each node (keeping
+a piece for itself as well) then perform task() on each piece in parallel.  Finally, it will combine the result
+of each task back into a single piece of data.  What if you had an array of data (and not just one big piece)?
+Well, that is where pseudoroots come into play.  Let's say for example that root receives 4 peices of data
+instead of just one.  Then, you would change the first 3 node definitions in your tree file to look like:
+</p>
+<pre>
+ node1 psuedoroot 0
+</pre>
+<p align="justify">
+Now, the distribution scheme that libdpl creates will look something like this:
+</p>
+<pre>
+ root------------node-node-node
+  |
+  +---psuedoroot-node-node-node
+  |
+  +---pseudoroot-node-node-node
+  |
+  +---pseudoroot-node-node-node
+</pre>
+<p align="justify">
+That is, the root will receive an array of size 4, split up each part of the array and send it off to a pseudoroot
+(keeping one element for itself).  Then, it will split up each element into 4 pieces and perform task() on
+each piece of each element in parallel.  Finally, it will combine each of the 4 outputs from each task back into
+an array element, then combine each element back into a array.  If you have an array of size 16, you can have
+a tree with only roots and pseudoroots (here, the number of nodes is 0, which is still divisible by the total
+number of roots).  Additionally, if you have an array of size greater than 16, libdpl will distribute the first
+16 pieces, perform them in parallel, then the next 16, and so on until all pieces are computed.  Note however,
+that if the number of pieces in an array is not divisible by the number of processes in that group, you may
+have processes idle while others work.  All this means however, is that this is an inefficient network scheme.
+</p>
+
+<p align="justify"></p>
+
+
+<h2>DPL and openmp</h2>
+
+<h3>Advantages and Disadvantages</h3>
+cant split up processors on a machine into different tree groups.
+
+<h3>How libdpl uses openmp</h3>
+
+<h3>Installing openmp libdpl</h3>
+<p align="justify">
+So you think that openmp might be something that would benefit your setup?  Well, to install libdpl with
+openmp support, add the following extra configure option.  Remember that openmp is a <em>compile time</em>
+option.  This means that libdpl will be configured for openmp and you cannot turn it on or off without
+recompiling libdpl.
+</p>
+<pre>
+ $ ./configure --prefix=/usr --with-openmp
+ $ make
+ # make install
+</pre>
+
+<h3>Compiling code with openmp libdpl</h3>
+<p align="justify">
+For gcc, the command line argument to enable openmp support is -fopenmp.  It may be (and most likely is)
+different from compiler to compiler.  Hence, if you use another compiler you may have to configure a lot
+of options on your own to turn on openmp.  However, feel free to email schweizer@cmu and ask for help.
+</p>
+<pre>
+ $ mpicc &lt;files&gt; -fopenmp -ldpl
+</pre>
+
+<h3>Hyperthreading</h3>
+<p align="justify">
+Most processors today are built on cores and as a result the idea of hyperthreading is obsolete.
+However, there may come a time when code is being written for older machines which do support hyperthreading
+and a common problem will arise involving the number of apparent processors seen on these machines.
+In general, at least on most intel machines, with kernels compiled for hyperthreading, each physical
+processor appears as two seperate processors to the operating system.  This was not generally a problem
+because the kernel was designed to adjust itself for hyperthreading and as a result, most of the time
+if two threads were spawned one would spawn on each processor first, before attempting to hyperthread on
+as single processor.  Unfortunately, this can confuse openmp.  In practice, we have noticed that openmp
+will think that it can spawn two threads per process by default.  While this might not be a problem
+for simple functions, the technology was ultimately not designed to function as two independent processors
+for any extended periods of time.  To combat this problem, DPL has a preprocessor macro DPL_HYPERTHREADING
+which can be set to the value of the number of threads seen for each process (generally 2).  The default
+setting for libdpl has this macro turned off, but the user can override this with
+</p>
+<pre>
+	#undef  DPL_HYPERTHREADING
+	#define DPL_HYPERTHREADING 2
+</pre>
+<p align="justify">
+This will tell libdpl that whenever openmp sees 2 cores it actually is only 1 processor and openmp
+should create a single thread and not 2.  If hyperthreading is still turned on in the kernel the
+operating system *should* spawn threads on seperate processors first, instead of trying to hyperthread
+by default on multi-processor machines.
+</p>
+
+</body>
+</html>

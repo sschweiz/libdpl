@@ -1,0 +1,55 @@
+.TH "dpl_cache.h" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_cache.h \- DPL cache functionality definitions. 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <sys/types.h>\fP
+.br
+\fC#include 'dpl_types.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "void \fBdpl_update_cache\fP (\fBdpl_t\fP *d)"
+.br
+.RI "\fIUpdates the dpl cache. \fP"
+.ti -1c
+.RI "void \fBdpl_group_info_cache\fP (\fBdpl_t\fP *d, size_t *group_size, size_t *roots, size_t *pseudoroots, size_t *nodes)"
+.br
+.RI "\fICached version of \fBdpl_group_info()\fP. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+DPL cache functionality definitions. 
+
+
+.SH "Function Documentation"
+.PP 
+.SS "void dpl_group_info_cache (\fBdpl_t\fP * d, size_t * group_size, size_t * roots, size_t * pseudoroots, size_t * nodes)"
+.PP
+Cached version of \fBdpl_group_info()\fP. 
+.PP
+\fBSee also:\fP
+.RS 4
+\fBdpl_group_info\fP 
+.RE
+.PP
+
+.SS "void dpl_update_cache (\fBdpl_t\fP * d)"
+.PP
+Updates the dpl cache. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fId\fP pointer to \fBdpl_t\fP structure
+.RE
+.PP
+Users should never modify the cache directly. Instead, edit the distribution identity tree and call this function. 
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.

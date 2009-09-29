@@ -1,0 +1,101 @@
+.TH "dpl_thread.h" 3 "8 Apr 2008" "Version Version 1.0" "libdpl" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+dpl_thread.h \- DPL thread and heartbeat control header. 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <pthread.h>\fP
+.br
+
+.SS "Data Structures"
+
+.in +1c
+.ti -1c
+.RI "struct \fBdpl_heartbeat_t\fP"
+.br
+.RI "\fIDPL threaded heartbeat structure. \fP"
+.in -1c
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBSIGBEAT\fP   0x0f3c"
+.br
+.RI "\fIHeartbeat transition signal. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "int \fBdpl_init_heartbeat\fP (\fBdpl_heartbeat_t\fP *b, int freq)"
+.br
+.RI "\fIInitializes the heartbeat structure and creates the thread. \fP"
+.ti -1c
+.RI "void \fBdpl_destory_heartbeat\fP (\fBdpl_heartbeat_t\fP *b)"
+.br
+.RI "\fIDestroys the heartbeat structure and terminates the thread. \fP"
+.ti -1c
+.RI "void * \fBdpl_beat\fP (void *args)"
+.br
+.RI "\fIHeartbeat thread function. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+DPL thread and heartbeat control header. 
+
+
+.SH "Define Documentation"
+.PP 
+.SS "#define SIGBEAT   0x0f3c"
+.PP
+Heartbeat transition signal. 
+.PP
+This is a signal that can be used by the user to turn on or off the heartbeat (as long as DPL_HEARTBEAT is specified in init). However, it will not interupt the current heartbeat. It will only take affect after the current heartbeat is finished. You can use it anywhere in your code by doing the following: 
+.PP
+.nf
+ #include <signal.h>
+ ...
+ raise(SIGBEAT);
+
+.fi
+.PP
+ 
+.SH "Function Documentation"
+.PP 
+.SS "void* dpl_beat (void * args)"
+.PP
+Heartbeat thread function. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIargs\fP void* typecast of the heartbeat structure 
+.RE
+.PP
+
+.SS "void dpl_destory_heartbeat (\fBdpl_heartbeat_t\fP * b)"
+.PP
+Destroys the heartbeat structure and terminates the thread. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP pointer to heartbeat structure 
+.RE
+.PP
+
+.SS "int dpl_init_heartbeat (\fBdpl_heartbeat_t\fP * b, int freq)"
+.PP
+Initializes the heartbeat structure and creates the thread. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIb\fP pointer to heartbeat structure 
+.br
+\fIfreq\fP desired heartbeat frequency 
+.RE
+.PP
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for libdpl from the source code.
