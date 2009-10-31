@@ -94,6 +94,9 @@ extern void __dpl_fail(const char *assertion, const char *file,
 extern void* __dpl_malloc(size_t len) __malloc;
 extern void __dpl_free(void *ptr);
 
+extern void* __dpl_malloc32(int32_t n);
+extern int32_t __dpl_msize32(void *ptr);
+
 #ifdef DPL_NDEBUG
 #define dpl_assert(expr)	((void)(0))
 #else

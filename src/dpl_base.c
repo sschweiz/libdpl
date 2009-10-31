@@ -36,7 +36,13 @@ void*
 __malloc
 __dpl_malloc(size_t len)
 {
-	return malloc(len);
+	void *ptr = NULL;
+	ptr = malloc(len);
+	if (!ptr) {
+		/* die! */
+	}
+
+	return ptr;
 }
 
 void __dpl_free(void *ptr)
@@ -44,3 +50,32 @@ void __dpl_free(void *ptr)
 	free(ptr);
 }
 
+void *
+__malloc
+__dpl_malloc32(int32_t n) {
+	void *ptr;
+	int32_t *p = NULL;
+	ptr = malloc(sizeof(int32_t)*(n+1));
+	if (ptr) {
+		p = (int32_t *)ptr;
+		p[0] = n;
+		p++;
+	} else {
+		/* die! */
+	}
+
+	return (void *)p;
+}
+
+int32_t
+__dpl_msize32(void *ptr) {
+	int32_t *p = (int32_t *)ptr;
+	if (p) {
+		p--;
+		if (!p) /* die! */
+	} else {
+		/* die! */
+	}
+
+	return p[0];
+}
