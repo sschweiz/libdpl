@@ -18,7 +18,7 @@ _zmemzero(void *b, size_t n)
 	}
 }
 
-void
+void *
 __fast
 _zmalloc(size_t n)
 {
@@ -32,12 +32,13 @@ __dpl_fail(const char *assertion, const char *file, unsigned int line, const cha
 	abort();
 }
 
-void*
+void *
 __malloc
 __dpl_malloc(size_t len)
 {
 	void *ptr = NULL;
 	ptr = malloc(len);
+	if ((!ptr) && (!len)) { ptr = malloc(1); }
 	if (!ptr) {
 		/* die! */
 	}
@@ -72,10 +73,35 @@ __dpl_msize32(void *ptr) {
 	int32_t *p = (int32_t *)ptr;
 	if (p) {
 		p--;
-		if (!p) /* die! */
+		if (!p) { /* die! */ }
 	} else {
 		/* die! */
 	}
 
 	return p[0];
+}
+
+void *
+__malloc
+__dpl_malloc_smart(size_t n)
+{
+	int32_t *p;
+	char *cp;
+	void *ptr = NULL;
+
+	ptr = malloc(n+sizeof(int32_t)+1);
+	if (ptr) {
+		/* set malloc'd bit */
+		cp = (char *)ptr;
+		cp[0] = 0x01;
+		cp++;
+		/* set allocation size */
+		p = (int32_t *)cp;
+		p[0] = (int32_t)n;
+		p++;
+	} else {
+		/* die! */
+	}
+
+	return (void *)p;
 }
