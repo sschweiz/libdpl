@@ -1,12 +1,3 @@
-/*
-	Stephen Schweizer <sschweizer@nokomisinc.com>
-
-	Copyright (c) 2008 Nokomis Inc., as an unpublished work.
-	All rights reserved.  US GOVT RESTRICTED RIGHTS.  Proprietary
-	Information of Nokomis Inc. Subject to Non-Disclosure
-	and License Agreement.  Do Not Copy or Distribute.
-*/
-
 #include "dsp.h"
 #include <string.h> /* for memcpy */
 #include <stdlib.h> /* for malloc & free */
