@@ -1,13 +1,9 @@
 /**
 	@file dsp.h
 	@brief Digital Signal Processing Algorithms
-	@author Stephen Schweizer <sschweizer@nokomisinc.com>
+	@author Stephen Schweizer <schweizer@alumni.cmu.edu>
 
-	Copyright (c) 2008-2009 Nokomis Inc., as an unpublished work.
-	
-	All rights reserved.  US GOVT RESTRICTED RIGHTS.  Proprietary Information
-	of Nokomis Inc. Subject to Non-Disclosure and License Agreement.  Do Not
-	Copy or Distribute.
+	Copyright (c) 2008-2009 Stephen Schweizer
 */
 
 #ifndef __DPL_DSP_H__
