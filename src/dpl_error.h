@@ -52,6 +52,6 @@ extern int dpl_errno;
 
 DPL_BASE_FUNC(reset_error,void,__none)();
 DPL_BASE_FUNC(throw_error,int,__none)();
-DPL_BASE_FUNC(error,void,__none)(int errno, unsigned char critical);
+void __dpl_error(int errno, unsigned char critical, unsigned int line);
 
 #endif
