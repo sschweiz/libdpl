@@ -14,7 +14,10 @@ int dpl_throw_error()
 	return raise(DPL_SIGNAL_ERROR);
 }
 
-void dpl_error(int errno, unsigned char critical)
+#define dpl_error(errno, critical) \
+	__dpl_error(errno, critical, __LINE__)
+
+void __dpl_error(int errno, unsigned char critical, unsigned int line)
 {
 #ifdef DPL_REPORT_ERRORS
 	dpl_errno = errno;
@@ -24,7 +27,7 @@ void dpl_error(int errno, unsigned char critical)
 	case DPL_THROW: dpl_throw_error(); break;
 	case DPL_EXIT: exit(1); break;
 	case DPL_ANNOY:
-		fprintf(stderr, "dpl_error[%d]: received generated error #%d\n", __LINE__, errno);
+		fprintf(stderr, "dpl_error[%d]: received generated error #%d\n", line, errno);
 		break;
 	}
 #else
